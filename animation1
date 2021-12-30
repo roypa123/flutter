@@ -1,1 +1,587 @@
-hello
+import 'package:flutter/material.dart';
+import 'package:flutter/animation.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return new MaterialApp(
+      home: new MyHomePage(),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key}) : super(key: key);
+
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage>
+    with SingleTickerProviderStateMixin {
+  late Animation animation;
+  late AnimationController animationController;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    animationController = AnimationController(
+      duration: Duration(seconds: 2),
+      vsync: this
+    );
+    animation = Tween(begin: -1.0, end: 0.0).animate(CurvedAnimation(
+      parent: animationController,
+      curve: Curves.fastOutSlowIn
+    ));
+
+
+    animationController.forward();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final double width = MediaQuery.of(context).size.width;
+    return AnimatedBuilder(
+      animation: animationController ,
+      builder: (BuildContext context, Widget? child){
+        return Scaffold(
+          body: Transform(
+            transform: Matrix4.translationValues(animation.value * width, 0.0, 0.0),
+            child: Center(
+              child: Container(
+                child: Text('Login',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold))
+              ),
+              ),
+          ),
+        );
+      },
+      ) ;
+  }
+}
+
+-----------------------------------------------------------------------------------------------------------------------------------
+
+
+
+import 'package:flutter/material.dart';
+import 'package:flutter/animation.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: MyHomePage(),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key}) : super(key: key);
+
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  
+
+
+  @override
+  Widget build(BuildContext context) {
+    
+    return new Scaffold(
+      appBar: new AppBar(
+        title: new Text('Gestures'),
+        centerTitle: true,
+      ),
+      body: new Center(
+        child: InkWell(
+          onTap: (){
+            print('clicked');
+          },
+          child: Container(
+            height: 70.0,
+            width: 100.0,
+            padding: EdgeInsets.all(10.0),
+            decoration: BoxDecoration(
+              //color: Colors.lightBlueAccent,
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Text('click me'),
+          ),
+        ),
+      ),
+    );
+
+    
+  }
+}
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+import 'package:flutter/material.dart';
+import 'package:flutter/animation.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return new MaterialApp(
+      home: new MyHomePage(),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key}) : super(key: key);
+
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage>
+    with SingleTickerProviderStateMixin {
+  late Animation animation, delayedAnimation, muchDelayedAnimation;
+  late AnimationController animationController;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    animationController = AnimationController(
+      duration: Duration(seconds: 2),
+      vsync: this
+    );
+    animation = Tween(begin: -1.0, end: 0.0).animate(CurvedAnimation(
+      parent: animationController,
+      curve: Curves.fastOutSlowIn
+    ));
+
+    delayedAnimation = Tween(begin: -1.0, end: 0.0).animate(
+      CurvedAnimation(
+        parent: animationController, 
+        curve: Interval(0.5, 1.0, curve: Curves.fastOutSlowIn)
+        )
+    );
+
+    muchDelayedAnimation = Tween(begin: -1.0, end: 0.0).animate(
+      CurvedAnimation(
+        parent: animationController, 
+        curve: Interval(0.8, 1.0, curve: Curves.fastOutSlowIn)
+        )
+    );
+
+
+    animationController.forward();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final double width = MediaQuery.of(context).size.width;
+    return AnimatedBuilder(
+      animation: animationController ,
+      builder: (BuildContext context, Widget? child){
+        return Scaffold(
+          body: Transform(
+            transform: Matrix4.translationValues(animation.value * width, 0.0, 0.0),
+            child: new Center(
+              child: Container(
+                child:Text('Login',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),)
+              ),
+              ),
+          ),
+        );
+      },
+      ) ;
+  }
+}
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+import 'package:flutter/material.dart';
+import 'package:flutter/animation.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: MyHomePage(),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key}) : super(key: key);
+
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage>
+    with SingleTickerProviderStateMixin {
+  late Animation animation, childAnimation;
+  late AnimationController animationController;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    animationController =
+        AnimationController(vsync: this, duration: Duration(seconds: 5));
+
+    animation = Tween(begin: -0.25, end: 0.0).animate(CurvedAnimation(
+      parent: animationController,
+      curve: Interval(0.5, 1.0, curve: Curves.easeIn),
+    ));
+
+    childAnimation = Tween(begin: 20, end: 125.0).animate(CurvedAnimation(
+      parent: animationController,
+      curve: Curves.easeIn,
+    ));
+
+    animationController.forward();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final double width = MediaQuery.of(context).size.width;
+    return AnimatedBuilder(
+      animation: animationController,
+      builder: (BuildContext context, Widget? child) {
+        return Scaffold(
+          body: Transform(
+          
+            transform:
+                Matrix4.translationValues(animation.value * width, 0.0, 0.0),
+            child: Center(
+              
+              child: AnimatedBuilder(
+                animation: childAnimation,
+                builder: (BuildContext context, Widget? child){
+                    return Center(
+                      child: Container(
+                        height: childAnimation.value * 2,
+                        width: childAnimation.value * 2,
+                        color: Colors.yellow,
+                        child: Text('dff'),
+                      ),
+                    );
+                },
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+import 'package:flutter/material.dart';
+import 'package:flutter/animation.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: MyHomePage(),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key}) : super(key: key);
+
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage>
+    with SingleTickerProviderStateMixin {
+  late Animation animation, transformationAnim;
+  late AnimationController animationController;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    animationController =
+        AnimationController(vsync: this, duration: Duration(seconds: 5));
+
+    animation = Tween(begin: 10, end: 200.0).animate(CurvedAnimation(
+      parent: animationController,
+      curve: Interval(0.5, 1.0, curve: Curves.ease),
+    ));
+
+    transformationAnim = BorderRadiusTween(
+            begin: BorderRadius.circular(125.0),
+            end: BorderRadius.circular(0.0))
+        .animate(
+      CurvedAnimation(
+        parent: animationController,
+        curve: Curves.ease,
+      ),
+    );
+
+    animationController.forward();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    
+    return AnimatedBuilder(
+      animation: animationController,
+      builder: (BuildContext context, Widget? child) {
+        return Scaffold(
+          body: Center(
+            child: Stack(
+              children: [
+                Center(
+                  child: Container(
+                    alignment: Alignment.bottomCenter,
+                    width: animation.value,
+                    height: animation.value,
+                    decoration: BoxDecoration(
+                      borderRadius: transformationAnim.value,
+                      image: DecorationImage(
+                        image: AssetImage('assets/waiting.png')
+                        )
+                    ),
+                  ),
+                )
+              ],
+              ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+import 'package:flutter/material.dart';
+import 'package:flutter/animation.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: MyHomePage(),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key}) : super(key: key);
+
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage>
+    with SingleTickerProviderStateMixin {
+  late Animation animation;
+  late AnimationController animationController;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    animationController =
+        AnimationController(vsync: this, duration: Duration(seconds: 8));
+
+    animation = IntTween(begin: 10, end: 0).animate(
+      CurvedAnimation(parent: animationController, curve: Curves.easeOut),
+    );
+
+    
+    animationController.forward();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final double width = MediaQuery.of(context).size.width;
+    return AnimatedBuilder(
+      animation: animationController,
+      builder: (BuildContext context, Widget? child) {
+        return Scaffold(
+          body: Center(
+            child: Container(
+             child: Column(
+               mainAxisAlignment: MainAxisAlignment.center,
+               children: [
+                 Text('Loading...'),
+                 Text(animation.value.toString(), style: TextStyle(
+                   fontSize: 52.0
+                  ),),
+               ],
+             ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+import 'package:flutter/material.dart';
+import 'package:flutter/animation.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: MyHomePage(),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key}) : super(key: key);
+
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage>
+    with SingleTickerProviderStateMixin {
+  late Animation animation;
+  late AnimationController animationController;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 500));
+
+    animation = Tween(begin: 0.0, end: -0.15).animate(
+      CurvedAnimation(parent: animationController, curve: Curves.ease),
+    );
+
+    //animationController.forward();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    return AnimatedBuilder(
+      animation: animationController,
+      builder: (BuildContext context, Widget? child) {
+        return Scaffold(
+          body: Center(
+              child: Stack(
+            children: [
+              Center(
+                child: Container(
+                  padding: EdgeInsets.all(10.0),
+                  width: 350.0,
+                  height: 200.0,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      RaisedButton(
+                        child: Text('Buy'),
+                        elevation: 7.0,
+                        color: Colors.blue,
+                        textColor: Colors.white,
+                        onPressed: () {},
+                      ),
+                      RaisedButton(
+                        child: Text('Details'),
+                        elevation: 7.0,
+                        color: Colors.blue,
+                        textColor: Colors.white,
+                        onPressed: () {},
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Center(
+                child: GestureDetector(
+                  child: Container(
+                    alignment: Alignment.bottomCenter,
+                    width: 350.0,
+                    height: 200.0,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15.0),
+                      image: DecorationImage(
+                        image: AssetImage('assets/waiting.png'),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    transform: Matrix4.translationValues(0.0, animation.value * width, 0.0),
+                  ),
+                  onDoubleTap: () {
+                    animationController.reverse();
+                  },
+                  onTap: () {
+                    animationController.forward();
+                  },
+                  
+                  
+                ),
+              )
+            ],
+          )),
+        );
+      },
+    );
+  }
+}
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
