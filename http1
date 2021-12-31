@@ -1,0 +1,163 @@
+main.dart
+**********
+
+
+
+//import 'package:anime/pin1.dart';
+import 'package:anime/posts.dart';
+
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({ Key? key }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      debugShowCheckedModeBanner: false,
+      home: PostsPage(),
+    );
+  }
+}
+
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+posts.dart
+**********
+
+import 'package:anime/http_service.dart';
+import 'package:anime/post_detail.dart';
+import 'package:anime/post_model.dart';
+import 'package:flutter/material.dart';
+
+class PostsPage extends StatelessWidget {
+  final HttpService httpService = HttpService();
+
+  PostsPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text("posts"),
+        ),
+        body: FutureBuilder(
+            future: httpService.getPosts(),
+            builder:
+                (BuildContext context, AsyncSnapshot<List<Post>> snapshot) {
+              if (snapshot.hasData) {
+                List<Post> posts = snapshot.data!;
+
+                return ListView(
+                  children: posts
+                      .map(
+                        (Post post) => ListTile(
+                          title: Text(post.title),
+                          subtitle: Text(
+                            post.id.toString(),
+                          ),
+                          onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => PostDetail(
+                                post: post,
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                );
+              }
+
+              return Center(child: CircularProgressIndicator());
+            }));
+  }
+}
+-------------------------------------------------------------------------------------------------------------------------------------
+
+post_model.dart
+***************
+
+import 'package:flutter/foundation.dart';
+
+class Post {
+  final int userId;
+  final int id;
+  final String title;
+  final String body;
+
+  Post({
+    required this.userId,
+    required this.id,
+    required this.title,
+    required this.body,
+  });
+
+  factory Post.fromJson(Map<String, dynamic> json){
+    return Post(
+      userId: json['userId'] as int,
+      body: json['body'] as String,
+      id: json['id'] as int,
+      title: json['title'] as String,
+    );
+  }
+}
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+
+post_detail.dart
+****************
+
+import 'package:anime/post_model.dart';
+import 'package:flutter/material.dart';
+
+class PostDetail extends StatelessWidget {
+  final Post post;
+  const PostDetail({Key? key, required this.post}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(post.title),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(12.0),
+          child: Card(
+            child: Column(
+              children: [
+                ListTile(
+                  title: Text("Title"),
+                  subtitle: Text(post.title),
+                ),
+                ListTile(
+                  title: Text("ID"),
+                  subtitle: Text('${post.id}'),
+                ),
+                ListTile(
+                  title: Text("Body"),
+                  subtitle: Text(post.body),
+                ),
+                ListTile(
+                  title: Text("User ID"),
+                  subtitle: Text("${post.userId}"),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
