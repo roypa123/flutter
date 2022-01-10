@@ -36,7 +36,24 @@ PopupMenuButton(
                 ),
           ),
      --------------------------------------------------------------------------------------------------------------------------------------------------------------
-     
+     MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(
+          value: Products(),
+        ),
+        ChangeNotifierProvider.value(
+          value: Cart(),
+        ),
+      ],
      --------------------------------------------------------------------------------------------------------------------------------------------------------------
-     
+     Spacer(),
+                  Chip(
+                    label: Text(
+                      '\$${cart.totalAmount}',
+                      style: TextStyle(
+                        color: Theme.of(context).primaryTextTheme.title.color,
+                      ),
+                    ),
+                    backgroundColor: Theme.of(context).primaryColor,
+                  ),
      --------------------------------------------------------------------------------------------------------------------------------------------------------------
